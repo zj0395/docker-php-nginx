@@ -8,12 +8,14 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     php7-zlib php7-xml php7-phar php7-intl php7-dom php7-xmlreader php7-ctype php7-session \
     php7-mbstring php7-gd php7-zip php7-pear php7-bcmath php7-pdo_mysql nginx supervisor curl grep git tzdata 
 
-# Configure nginx
-COPY config/nginx.conf /etc/nginx/nginx.conf
 # Remove default server definition
 RUN rm /etc/nginx/conf.d/default.conf \
   && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
   && echo 'Asia/Shanghai' >/etc/timezone
+
+# Configure nginx
+COPY config/nginx.conf /etc/nginx/nginx.conf
+COPY config/nginx_default.conf /etc/nginx/conf.d/default.conf
 
 # Configure PHP-FPM
 COPY config/fpm-pool.conf /etc/php7/php-fpm.d/www.conf
